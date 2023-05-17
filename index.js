@@ -58,6 +58,7 @@ class CheckboxPlusPrompt extends Base {
     this.choices = new Choices([], answers);
     this.checkedChoices = [];
     this.value = [];
+    this.valueOrdered = [];
     this.lastQuery = null;
     this.searching = false;
     this.lastSourcePromise = null;
@@ -331,10 +332,8 @@ class CheckboxPlusPrompt extends Base {
    * @return {Array}
    */
   getCurrentValue() {
-
-    this.selection = _.map(this.checkedChoices, 'short');
-    return _.map(this.checkedChoices, 'value');
-
+    this.selection = _.map(this.valueOrdered, (value) => _.find(this.checkedChoices, {value})?.short ?? value);
+    return this.valueOrdered;
   }
 
   /**
@@ -469,6 +468,11 @@ class CheckboxPlusPrompt extends Base {
       this.value.push(choice.value);
       this.checkedChoices.push(choice);
       choice.checked = true;
+      if (this.valueOrdered.indexOf(choice.value) === -1) {
+        this.valueOrdered.push(choice.value);
+      }
+    } else {
+      _.remove(this.valueOrdered, _.isEqual.bind(null, choice.value));
     }
 
   }
