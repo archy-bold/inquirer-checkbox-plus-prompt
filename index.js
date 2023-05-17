@@ -31,6 +31,8 @@ class CheckboxPlusPrompt extends Base {
   constructor(questions, rl, answers) {
 
     super(questions, rl, answers);
+    
+    rl.history = [];
 
     // Default value for the highlight option
     if (typeof this.opt.highlight == 'undefined') {
